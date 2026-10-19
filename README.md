@@ -16,10 +16,10 @@ End-to-end customer analytics on 1.07M online-retail transactions: data-quality 
 ## Key findings
 - **Revenue is highly concentrated.** The top 10% of customers generate 63.4% of revenue. RFM "Champions" are 25.8% of customers but 71.0% of revenue.
 - **27.7% of customers bought only once**; 27.2% have not purchased in the last 365 days.
-- **K-means validates RFM and adds detail.** 95% of RFM "Hibernating" and 99.7% of "At Risk" customers fall in one K-means cluster each (stability across seeds: min ARI 0.998). K-means also splits "Champions" into two groups: 1,055 high-value regulars (about 19 orders each) and 338 recent mid-value customers (about 3 orders).
+- **K-means broadly agrees with RFM and adds detail.** Agreement is moderate (ARI 0.533, NMI 0.577; 4 clusters vs 8 segments), but 95% of "Hibernating" and 99.7% of "At Risk" customers fall in one cluster each. Clusters are stable across random initialisations (min ARI 0.998). k = 4 clusters remain stable under 80% subsampling: mean ARI 0.983. Silhouette is 0.366, so customers form a continuum rather than sharply separated groups, and k = 4 is a practical choice (k = 3 and k = 5 score almost the same: 0.348 and 0.347), not a uniquely optimal one. K-means also splits "Champions" into two groups: 1,055 high-value regulars (about 19 orders each) and 338 recent mid-value customers (about 3 orders).
 - **Inactivity prediction beats a simple rule, moderately.** Walk-forward ROC-AUC 0.796 (logistic regression) vs 0.747 for a "no order in 90 days" baseline (accuracy 71.8% vs 70.3% on the last test period). The gain is consistent across all four test periods but modest, because recency alone is already a strong signal. Monetary value and recency are the strongest signals.
 - **CLV model ranks customers well but is only slightly better than a "last 6 months revenue" baseline** (Spearman 0.600 vs 0.569; top 10% of customers capture about 62% of actual revenue, 71% is the maximum possible). It is more useful for ranking than for exact forecasts.
-- - **Offer design matters more than targeting.** With a 10% discount, most targeting strategies lose money (break-even save rate 17% to 99%) because the discount also goes to customers who would have bought anyway. Without a discount, the four fixed strategies break even at a 0.6%–3.6% save rate (assuming a contact cost of 1 per customer).
+- **Offer design matters more than targeting.** With a 10% discount, most targeting strategies lose money (break-even save rate 17% to 99%) because the discount also goes to customers who would have bought anyway. Without a discount, the four fixed strategies break even at a 0.6%–3.6% save rate (assuming a contact cost of 1 per customer).
 
 ## Recommended actions by segment
 
@@ -62,6 +62,15 @@ Built in Power BI from exported CSVs (`data/powerbi`). Pages: Overview, Segments
 ![Data Quality](outputs/dashboard/page5_data_quality.png)
 
 PDF export: `outputs/dashboard/retail_dashboard.pdf`. Power BI file: `powerbi/retail_dashboard.pbix`.
+
+## Validation checks
+
+- Row counts reconcile at every stage (raw → cleaned → analysis base); segment, risk-band and CLV totals sum to the overall totals.
+- Leakage controls: features use only data before each snapshot, label windows do not overlap, and recency/tenure are never zero or negative.
+- Cross-tool check: the Power BI simulator reproduces the Python simulator's results.
+- Model comparisons use chronological (walk-forward) evaluation against simple baselines.
+- Not done: independent code review, confidence intervals / significance tests for model differences, and a full clean-room rerun of the pipeline. Differences such as the CLV model's Spearman gain (0.600 vs 0.569) should be read as indicative.
+- Tested on Windows 11 with MySQL 8 and Python 3.14; results are deterministic where a seed is set (42).
 
 ## Limitations
 - Revenue is gross sales; there is no cost data, so margin in the simulator is an assumption.

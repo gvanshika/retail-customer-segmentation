@@ -14,3 +14,5 @@ notes/
 
 # secrets
 .env
+
+.venv_test/
