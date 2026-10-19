@@ -1,0 +1,9 @@
+segment,action,priority
+Cannot Lose Them,Personal outreach (top priority),1
+At Risk,Win-back offer,2
+Champions,"Reward, early access, referral",3
+Loyal Customers,"Upsell, loyalty program",4
+Potential Loyalists,Nudge for repeat purchase,5
+New / Promising,Onboarding offer,6
+Needs Attention,"Reminder, limited-time offer",7
+Hibernating,Low-cost reactivation or ignore,8

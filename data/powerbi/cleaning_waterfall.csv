@@ -1,0 +1,6 @@
+step_no,step_name,rows_n
+1,Raw rows,1067371
+2,After overlap removed,1044848
+3,After duplicates removed,1033036
+4,Valid sale rows,1003361
+5,"Analysis base (non-guest, 2 outliers removed)",776598

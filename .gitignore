@@ -1,0 +1,16 @@
+# raw data (large, download from UCI)
+data/raw/
+
+# editor / python
+.vscode/
+__pycache__/
+*.pyc
+
+# private work logs (Hinglish notes)
+notes/
+
+# office temp files
+~$*
+
+# secrets
+.env
